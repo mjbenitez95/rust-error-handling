@@ -1,5 +1,6 @@
 use std::fs::File;
-use std::io::ErrorKind;
+use std::io;
+use std::io::{ErrorKind, Read};
 
 fn main() {
     panic_statement();
@@ -8,6 +9,7 @@ fn main() {
 
     recover_with_result();
     unwrap_and_expect();
+    propogate_error();
 }
 
 fn panic_statement() {
@@ -56,4 +58,39 @@ fn unwrap_and_expect() {
     let file_name = String::from("good-morning.txt");
     // let f = File::open(&file_name).unwrap();
     let f = File::open(&file_name).expect("Failed to open good-morning.txt.");
+}
+
+fn propogate_error() {
+    read_user_name_from_file();
+    read_user_name_but_concise();
+}
+
+fn read_user_name_from_file() -> Result<String, io::Error> {
+    let file_name = String::from("username.txt");
+    let f = File::open(&file_name);
+
+    let mut f = match f {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+
+    let mut s = String::new();
+
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
+
+fn read_user_name_but_concise() -> Result<String, io::Error> {
+    /*
+        the '?' operator is the same as the Err(e) => return Err(e)
+        arms of the match above, except that it'll convert any errors
+        to be the type that is in the return type in the fn signature
+    */
+    let file_name = String::from("username.txt");
+    let mut f = File::open(&file_name)?; 
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s);
 }

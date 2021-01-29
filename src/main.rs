@@ -7,6 +7,7 @@ fn main() {
     println!();
 
     recover_with_result();
+    unwrap_and_expect();
 }
 
 fn panic_statement() {
@@ -42,11 +43,17 @@ fn recover_with_result() {
 
     let _g = File::open("goodbye.txt").unwrap_or_else(|error| {
         if error.kind() == ErrorKind::NotFound {
-            File::create("hello.txt").unwrap_or_else(|error| {
+            File::create("goodbye.txt").unwrap_or_else(|error| {
                 panic!("Problem creating the file: {:?}", error);
             })
         } else {
             panic!("Problem opening the file: {:?}", error);
         }
     });
+}
+
+fn unwrap_and_expect() {
+    let file_name = String::from("good-morning.txt");
+    // let f = File::open(&file_name).unwrap();
+    let f = File::open(&file_name).expect("Failed to open good-morning.txt.");
 }

@@ -1,3 +1,4 @@
 fn main() {
-    println!("Hello, world!");
+    // example of panic statement
+    panic!("We're crashing and burning!");
 }

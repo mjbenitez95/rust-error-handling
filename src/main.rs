@@ -10,6 +10,7 @@ fn main() {
     recover_with_result();
     unwrap_and_expect();
     propogate_error();
+    println!();
 }
 
 fn panic_statement() {
@@ -89,8 +90,17 @@ fn read_user_name_but_concise() -> Result<String, io::Error> {
         to be the type that is in the return type in the fn signature
     */
     let file_name = String::from("username.txt");
-    let mut f = File::open(&file_name)?; 
+    let mut f = File::open(&file_name)?;
     let mut s = String::new();
     f.read_to_string(&mut s)?;
+    Ok(s);
+}
+
+fn read_user_name_but_more_concise() -> Result<String, io::Error> {
+    let file_name = String::from("username.txt");
+    let mut s = String::new();
+
+    File::open(&file_name)?.read_to_string(&mut s)?;
+
     Ok(s);
 }

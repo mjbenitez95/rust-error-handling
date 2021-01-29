@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::{ErrorKind, Read};
@@ -9,7 +10,7 @@ fn main() {
 
     recover_with_result();
     unwrap_and_expect();
-    propogate_error();
+    propagate_error();
     println!();
 }
 
@@ -61,9 +62,10 @@ fn unwrap_and_expect() {
     let f = File::open(&file_name).expect("Failed to open good-morning.txt.");
 }
 
-fn propogate_error() {
+fn propagate_error() {
     read_user_name_from_file();
     read_user_name_but_concise();
+    read_user_name_but_one_line();
 }
 
 fn read_user_name_from_file() -> Result<String, io::Error> {
@@ -103,4 +105,8 @@ fn read_user_name_but_more_concise() -> Result<String, io::Error> {
     File::open(&file_name)?.read_to_string(&mut s)?;
 
     Ok(s);
+}
+
+fn read_user_name_but_one_line() -> Result<String, io::Error> {
+    fs::read_to_string("username.txt")
 }
